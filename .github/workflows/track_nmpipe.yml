@@ -30,7 +30,7 @@ jobs:
       - name: date stamp
         run: |
           touch ./DATE-STAMP
-          echo ${{ steps.current-time.outputs.formattedTime }} > nmrpipe-tracker/DATE-STAMP
+          echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE-STAMP
 
 #       - name: Install SSH key
 #         uses: shimataro/ssh-key-action@v2
@@ -46,6 +46,5 @@ jobs:
 
         with:
           message: test
-          cwd: ./nmrpipe-tracker
           add: DATE-STAMP
           branch: main
