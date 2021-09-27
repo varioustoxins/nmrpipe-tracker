@@ -2,7 +2,7 @@
 name: TRACK_NMRPIPE
 on:
   schedule:
-    - cron: '0-59 * * *'
+    - cron: "0-59 * * *"
 
   workflow_dispatch:
 
