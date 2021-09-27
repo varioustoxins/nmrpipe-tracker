@@ -1,8 +1,8 @@
 # .github/workflows/tests.yml
 name: TRACK_NMRPIPE
 on:
-#  schedule:
-#    - cron: '0-59 * * *'
+  schedule:
+    - cron: '0-59 * * *'
 
   workflow_dispatch:
 
