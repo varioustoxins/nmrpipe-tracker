@@ -31,7 +31,7 @@ jobs:
       - name: Install Python packages
         uses: py-actions/py-dependency-install@v2
         with:
-          path: requirements.txt
+          path: ./requirements.txt
 
 
 #      - name: checkout master
