@@ -40,7 +40,7 @@ jobs:
       - name: Download nmrpipe if not current
         run: |
           if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
-            echo "files differ"
+            python scripts/get_pipe_urls.py >> PIPE_URLS_AND_CHECKSUMS
           fi
 
 
