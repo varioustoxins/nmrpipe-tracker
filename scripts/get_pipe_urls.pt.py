@@ -1,17 +1,24 @@
 from bs4 import BeautifulSoup
-import re
+from tabulate import tabulate
 import requests
 
 from cmp_version import VersionString
 
 
 def parse_page(content_soup):
-
-    return [elem.get('href') for elem in content_soup.find_all('a')]
+    anchors = content_soup.find_all('a')
+    parts = [[elem.get('href'), elem.parent.parent] for elem in anchors]
+    return parts
 
 
 def select_urls(urls):
-    return [url for url in urls  if url is not None and url.split('.')[-1] in ['tZ', 'com']]
+    result = []
+    for url in urls:
+        base_url = url[0]
+        extension = base_url.split('.')[-1]
+        if extension in ['tZ', 'com']:
+            result.append(url)
+    return result
 
 
 def get_page():
@@ -27,8 +34,24 @@ def get_page():
 if __name__ == '__main__':
     page = get_page()
     soup = BeautifulSoup(page.text, 'html.parser')
-    urls = parse_page(soup)
-    urls = select_urls(urls)
-    urls = set(urls)
-    for url in urls:
-        print(url)
+    found_urls = parse_page(soup)
+    found_urls = select_urls(found_urls)
+
+    result = []
+    for found_url in found_urls:
+
+        row = found_url[1]
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols]
+        elements = [ele for ele in cols if ele]
+
+        if elements and isinstance(elements, list):
+            if elements[0].startswith('File'):
+                if len(elements) > 5:
+                    bytes = elements[4].replace(',','').replace('bytes', '')
+                    chksum = elements[5]
+                else:
+                    bytes  = '.'
+                    chksum = '.'
+                result.append([found_url[0],bytes, chksum])
+    print(tabulate(result, tablefmt='plain'))
