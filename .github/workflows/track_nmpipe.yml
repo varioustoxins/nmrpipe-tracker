@@ -62,5 +62,4 @@ jobs:
 
         with:
           message: test
-          add: [DATE-STAMP, PIPE_VERSION]
           branch: main
