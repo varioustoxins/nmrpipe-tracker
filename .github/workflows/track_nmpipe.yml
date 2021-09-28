@@ -1,6 +1,10 @@
 # .github/workflows/tests.yml
 name: TRACK_NMRPIPE
 on:
+
+  push:
+    branches: [ main ]
+
   schedule:
     - cron: "0,10,20,30,40,50 * * * *"
 
@@ -20,6 +24,15 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+
+      -name: Install Python packages
+        uses: py-actions/py-dependency-install@v2
+        with:
+          path: requirements.txt
+
 
 #      - name: checkout master
 #        working-directory: ./nmrpipe-tracker
