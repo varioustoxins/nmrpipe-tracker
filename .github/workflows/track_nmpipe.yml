@@ -28,7 +28,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v2
 
-      -name: Install Python packages
+      - name: Install Python packages
         uses: py-actions/py-dependency-install@v2
         with:
           path: requirements.txt
