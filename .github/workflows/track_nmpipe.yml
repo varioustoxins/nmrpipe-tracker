@@ -35,7 +35,14 @@ jobs:
 
       - name: Get pipe version
         run: |
-          python scripts/get_pipe_version.py >> PIPE_VERSION
+          python scripts/get_pipe_version.py >> CURRENT_PIPE_VERSION
+
+      - name: Download nmrpipe if not current
+        run: |
+          if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
+            echo "files differ"
+          fi
+
 
 #      - name: checkout master
 #        working-directory: ./nmrpipe-tracker
