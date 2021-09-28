@@ -33,6 +33,9 @@ jobs:
         with:
           path: ./requirements.txt
 
+      - name: Get pipe version
+        run: |
+          python get_pipe_version.py >> PIPE_VERSION
 
 #      - name: checkout master
 #        working-directory: ./nmrpipe-tracker
@@ -59,5 +62,5 @@ jobs:
 
         with:
           message: test
-          add: DATE-STAMP
+          add: [DATE-STAMP, PIPE_VERSION]
           branch: main
