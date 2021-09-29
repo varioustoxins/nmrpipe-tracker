@@ -40,9 +40,12 @@ jobs:
       - name: Download nmrpipe if not current
         run: |
           if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
-            python scripts/get_pipe_urls.py >> PIPE_URLS_AND_CHECKSUMS
-            for url in $(python scripts/get_pipeurls.py); do
-               wget $url
+            python scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
+            mkdir MIRROR
+            for url_filename in $(python scripts/get_pipe_urls.py); do
+               url=${STR%-*}
+               file-name=${STR#*-}
+               wget $url -o MIRROR/$file_name
             done
           fi
 
