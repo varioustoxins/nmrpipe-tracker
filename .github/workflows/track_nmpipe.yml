@@ -44,7 +44,7 @@ jobs:
             mkdir MIRROR
             for url in $(python3 scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
               file_name=$(python3 scripts/url_to_filename.py $url)
-              wget $url  -O MIRROR/$file_name
+              wget $url -nv -O MIRROR/$file_name
             done
           fi
 
