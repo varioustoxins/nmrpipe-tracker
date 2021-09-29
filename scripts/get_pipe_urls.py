@@ -37,7 +37,7 @@ if __name__ == '__main__':
     found_urls = parse_page(soup)
     found_urls = select_urls(found_urls)
 
-    result = []
+    result = [['url', 'bytes', 'cksum']]
     for found_url in found_urls:
 
         row = found_url[1]
