@@ -72,8 +72,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ VERSION_PREFIX }}.binval.com
-          tag_name: ${{ VERSION_PREFIX }}.binval.com
+          release_name: ${{ env.VERSION_PREFIX }}.binval.com
+          tag_name: ${{ env.VERSION_PREFIX }}.binval.com
           body: test
         env:
           GITHUB_TOKEN: ${{ github.token }}
