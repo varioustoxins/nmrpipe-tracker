@@ -42,10 +42,9 @@ jobs:
           if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
             python scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
             mkdir MIRROR
-            for url_filename in $(python scripts/get_pipe_urls.py); do
-               url=${STR%-*}
-               file-name=${STR#*-}
-               wget $url -o MIRROR/$file_name
+            for url in $(python3 scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
+              file_name=$(python3 scripts/url_to_filename.py $url)
+              wget $url  -O MIRROR/$file_name
             done
           fi
 
