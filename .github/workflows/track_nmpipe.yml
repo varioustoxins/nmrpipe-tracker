@@ -41,6 +41,9 @@ jobs:
         run: |
           if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
             python scripts/get_pipe_urls.py >> PIPE_URLS_AND_CHECKSUMS
+            for url in $(python scripts/get_pipeurls.py); do
+               wget $url
+            done
           fi
 
 
