@@ -35,7 +35,7 @@ jobs:
 
       - name: Get pipe version
         run: |
-          python scripts/get_pipe_version.py >> CURRENT_PIPE_VERSION
+          python scripts/get_pipe_version.py > CURRENT_PIPE_VERSION
 
       - name: Download nmrpipe if not current
         run: |
