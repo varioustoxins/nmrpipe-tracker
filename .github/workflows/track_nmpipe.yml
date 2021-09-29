@@ -37,17 +37,17 @@ jobs:
         run: |
           python scripts/get_pipe_version.py > CURRENT_PIPE_VERSION
 
-      - name: Download nmrpipe if not current
-        run: |
-          if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
-            python scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
-            mkdir MIRROR
-            for url in $(python3 scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
-              file_name=$(python3 scripts/url_to_filename.py $url)
-              wget $url -nv -O MIRROR/$file_name
-              break
-            done
-          fi
+#      - name: Download nmrpipe if not current
+#        run: |
+#          if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
+#            python scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
+#            mkdir MIRROR
+#            for url in $(python3 scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
+#              file_name=$(python3 scripts/url_to_filename.py $url)
+#              wget $url -nv -O MIRROR/$file_name
+#              break
+#            done
+#          fi
 
 
 #      - name: checkout master
@@ -66,17 +66,17 @@ jobs:
           CURRENT_PIPE_VERSION=$(cat CURRENT_PIPE_VERSION)
 
 
-#      - name: release
-#          uses: actions/create-release@v1
-#          id: create_release
-#          with:
-#            draft: false
-#            prerelease: false
-#            release_name: ${VERSION_PREFIX}.binval.com
-#            tag_name: ${VERSION_PREFIX}.binval.com
-#            body_path: CHANGELOG.md
-#          env:
-#            GITHUB_TOKEN: ${{ github.token }}
+      - name: release
+          uses: actions/create-release@v1
+          id: create_release
+          with:
+            draft: false
+            prerelease: false
+            release_name: ${VERSION_PREFIX}.binval.com
+            tag_name: ${VERSION_PREFIX}.binval.com
+            body_path: CHANGELOG.md
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
 
 #      - name: upload artifact
 #          uses: actions/upload-release-asset@v1
