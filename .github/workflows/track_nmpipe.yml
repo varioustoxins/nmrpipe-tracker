@@ -71,28 +71,34 @@ jobs:
         run: |
           echo CURRENT_PIPE_VERSION=`cat CURRENT_PIPE_VERSION`>> $GITHUB_ENV
 
+      - name: Upload
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       run: |
+         tag_name=nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+         hub release edit $(find . -type f -name "MIRROR/*" -printf "-a %p ") -m "" "$tag_name"
 
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}.binval.com
-          tag_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}.binval.com
-          body: test
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: upload artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./MIRROR/binval.com
-          asset_name: binval.com
-          asset_content_type: application/text
+#      - name: release
+#        uses: actions/create-release@v1
+#        id: create_release
+#        with:
+#          draft: false
+#          prerelease: false
+#          release_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+#          tag_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+#          body: test
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#
+#      - name: upload artifact
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: ./MIRROR/binval.com
+#          asset_name: binval.com
+#          asset_content_type: application/text
 
 #       - name: Install SSH key
 #         uses: shimataro/ssh-key-action@v2
