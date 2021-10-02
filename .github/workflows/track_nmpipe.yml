@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  release:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -37,10 +37,8 @@ jobs:
         run: |
           python .github/workflows/scripts/get_pipe_version.py > CURRENT_PIPE_VERSION
 
-  download:
-    needs: setup
-    steps:
       - name: Download nmrpipe if not current
+        id: download
         run: |
           if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
             python .github/workflows/scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
@@ -50,25 +48,30 @@ jobs:
               wget $url -nv -O MIRROR/$file_name
             done
             mv CURRENT_PIPE_VERSION PIPE_VERSION
+
+          else
+            exit 1
           fi
-  release_and_commit:
-    needs: download
-    steps:
+
       - name: Do check sums
+        if: job.steps.download.status == success()
         run:  |
           python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
 
       # Runs a set of commands using the runners shell
       - name: Create a date stamp
+        if: job.steps.download.status == success()
         run: |
           touch ./DATE_STAMP
           echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE_STAMP
 
       - name: Put nmrpipe version in environment variable
+        if: job.steps.download.status == success()
         run: |
           echo PIPE_VERSION=`cat PIPE_VERSION`>> $GITHUB_ENV
 
       - name: release
+        if: job.steps.download.status == success()
         uses: actions/create-release@v1
         id: create_release
         with:
@@ -81,6 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload
+        if: job.steps.download.status == success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -91,14 +95,11 @@ jobs:
           hub release edit -a PIPE_URLS_AND_CHECKSUMS -m "" "$tag_name"
 
       - name: Remove mirror directory
+        if: job.steps.download.status == success()
         run: |
           rm -rf MIRROR
           rm PIPE_URLS_AND_CHECKSUMS
           rm DATE_STAMP
-
-      - name: Update version file
-        run: |
-          mv CURRENT_PIPE_VERSION PIPE_VERSION
 
 #      - name: release
 #        uses: actions/create-release@v1
@@ -132,6 +133,7 @@ jobs:
 #           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
       - name: commit
+        if: job.steps.download.status == success()
         uses: EndBug/add-and-commit@v7
 
         with:
