@@ -53,12 +53,12 @@ jobs:
           python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
 
       # Runs a set of commands using the runners shell
-      - name: date stamp
+      - name: creaet a date stamp
         run: |
           touch ./DATE_STAMP
           echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE_STAMP
 
-      - name: date stamp in environment variable
+      - name: Put nmrpipe version in environment variable
         run: |
           echo CURRENT_PIPE_VERSION=`cat CURRENT_PIPE_VERSION`>> $GITHUB_ENV
 
@@ -90,7 +90,7 @@ jobs:
           rm PIPE_URLS_AND_CHECKSUMS
           rm DATE_STAMP
 
-      - name: Update date stamp
+      - name: Update version file
         run: |
           mv CURRENT_PIPE_VERSION PIPE_VERSION
 
@@ -131,5 +131,6 @@ jobs:
         with:
           message: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
           branch: main
+          add: PIPE_VERSION
 
 
