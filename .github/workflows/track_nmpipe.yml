@@ -78,15 +78,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-#      - name: upload artifact
-#          uses: actions/upload-release-asset@v1
-#          env:
-#            GITHUB_TOKEN: ${{ github.token }}
-#          with:
-#            upload_url: ${{ steps.create_release.outputs.upload_url }}
-#            asset_path: ./MIRROR/binval.com
-#            asset_name: ${VERSION_PREFIX}.binval.com
-#            asset_content_type: application/text
+      - name: upload artifact
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./MIRROR/binval.com
+            asset_name: binval.com
+            asset_content_type: application/text
 
 #       - name: Install SSH key
 #         uses: shimataro/ssh-key-action@v2
