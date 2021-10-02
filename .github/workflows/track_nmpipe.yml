@@ -71,6 +71,18 @@ jobs:
         run: |
           echo CURRENT_PIPE_VERSION=`cat CURRENT_PIPE_VERSION`>> $GITHUB_ENV
 
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+          tag_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+          body: test
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
       - name: Upload
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
