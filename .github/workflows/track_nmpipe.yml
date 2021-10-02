@@ -72,11 +72,11 @@ jobs:
           echo CURRENT_PIPE_VERSION=`cat CURRENT_PIPE_VERSION`>> $GITHUB_ENV
 
       - name: Upload
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       run: |
-         tag_name=nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
-         hub release edit $(find . -type f -name "MIRROR/*" -printf "-a %p ") -m "" "$tag_name"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag_name=nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+          hub release edit $(find . -type f -name "MIRROR/*" -printf "-a %p ") -m "" "$tag_name"
 
 #      - name: release
 #        uses: actions/create-release@v1
