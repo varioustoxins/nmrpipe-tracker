@@ -54,19 +54,19 @@ jobs:
           fi
 
       - name: Do check sums
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD == '1'}}
         run:  |
           python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
 
       # Runs a set of commands using the runners shell
       - name: Create a date stamp
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD == '1'}}
         run: |
           touch ./DATE_STAMP
           echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE_STAMP
 
       - name: Put nmrpipe version in environment variable
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD  == '1'}}
         run: |
           echo PIPE_VERSION=`cat PIPE_VERSION`>> $GITHUB_ENV
 
