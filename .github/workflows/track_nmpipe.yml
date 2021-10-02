@@ -45,7 +45,6 @@ jobs:
             for url in $(python3 .github/workflows/scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
               file_name=$(python3 .github/workflows/scripts/url_to_filename.py $url)
               wget $url -nv -O MIRROR/$file_name
-              break
             done
           fi
 
