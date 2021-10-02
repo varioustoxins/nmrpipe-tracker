@@ -31,7 +31,7 @@ jobs:
       - name: Install Python packages
         uses: py-actions/py-dependency-install@v2
         with:
-          path: ./requirements.txt
+          path: .github/workflows/requirements.txt
 
       - name: Get pipe version
         run: |
@@ -77,8 +77,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: nmrpipe.${{ env.CURRENT_PIPE_VERSION }}.binval.com
-          tag_name: nmrpipe.${{ env.CURRENT_PIPE_VERSION }}.binval.com
+          release_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}.binval.com
+          tag_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}.binval.com
           body: test
         env:
           GITHUB_TOKEN: ${{ github.token }}
