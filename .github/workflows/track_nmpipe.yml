@@ -63,7 +63,7 @@ jobs:
 
       - name: date stamp in environment variable
         run: |
-          echo CURENT_PIPE_VERSION=`CURRENT_PIPE_VERSION`>> $GITHUB_ENV
+          echo CURRENT_PIPE_VERSION=`cat CURRENT_PIPE_VERSION`>> $GITHUB_ENV
 
 
       - name: release
