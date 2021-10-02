@@ -48,30 +48,30 @@ jobs:
               wget $url -nv -O MIRROR/$file_name
             done
             mv CURRENT_PIPE_VERSION PIPE_VERSION
-
+            echo DOWNLOAD=1 >> $GITHUB_ENV
           else
-            exit 1
+            echo DOWNLOAD=0 >> $GITHUB_ENV
           fi
 
       - name: Do check sums
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         run:  |
           python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
 
       # Runs a set of commands using the runners shell
       - name: Create a date stamp
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         run: |
           touch ./DATE_STAMP
           echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE_STAMP
 
       - name: Put nmrpipe version in environment variable
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         run: |
           echo PIPE_VERSION=`cat PIPE_VERSION`>> $GITHUB_ENV
 
       - name: release
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         uses: actions/create-release@v1
         id: create_release
         with:
@@ -84,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -95,7 +95,7 @@ jobs:
           hub release edit -a PIPE_URLS_AND_CHECKSUMS -m "" "$tag_name"
 
       - name: Remove mirror directory
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         run: |
           rm -rf MIRROR
           rm PIPE_URLS_AND_CHECKSUMS
@@ -133,7 +133,7 @@ jobs:
 #           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
       - name: commit
-        if: job.steps.download.status == 'success'
+        if: ${{ env.DOWNLOAD }} == '1'
         uses: EndBug/add-and-commit@v7
 
         with:
