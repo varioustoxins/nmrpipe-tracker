@@ -71,7 +71,7 @@ jobs:
           echo PIPE_VERSION=`cat PIPE_VERSION`>> $GITHUB_ENV
 
       - name: release
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD  == '1'}}
         uses: actions/create-release@v1
         id: create_release
         with:
@@ -84,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD  == '1'}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -95,7 +95,7 @@ jobs:
           hub release edit -a PIPE_URLS_AND_CHECKSUMS -m "" "$tag_name"
 
       - name: Remove mirror directory
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD  == '1'}}
         run: |
           rm -rf MIRROR
           rm PIPE_URLS_AND_CHECKSUMS
@@ -133,7 +133,7 @@ jobs:
 #           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
       - name: commit
-        if: ${{ env.DOWNLOAD }} == '1'
+        if: ${{ env.DOWNLOAD  == '1'}}
         uses: EndBug/add-and-commit@v7
 
         with:
