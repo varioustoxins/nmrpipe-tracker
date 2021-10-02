@@ -3,9 +3,6 @@ import sys
 from pathlib import Path
 import pycksum
 
-
-
-from icecream import ic
 from url_to_filename import url_to_filename
 
 EXIT_ERROR = 1
