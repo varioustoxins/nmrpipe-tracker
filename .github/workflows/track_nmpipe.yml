@@ -70,15 +70,15 @@ jobs:
         run: |
           echo PIPE_VERSION=`cat PIPE_VERSION`>> $GITHUB_ENV
 
-      - name: release
+      - name: Release
         if: ${{ env.DOWNLOAD  == '1'}}
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
-          tag_name: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+          release_name: nmrpipe-${{ env.PIPE_VERSION }}
+          tag_name: nmrpipe-${{ env.PIPE_VERSION }}
           body: test
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -88,9 +88,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag_name=nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+          tag_name=nmrpipe-${{ env.PIPE_VERSION }}
           hub release edit $(find ./MIRROR -type f -name "*" -printf "-a %p ") -m "" "$tag_name"
-          hub release edit -a CURRENT_PIPE_VERSION -m "" "$tag_name"
+          hub release edit -a PIPE_VERSION -m "" "$tag_name"
           hub release edit -a DATE_STAMP -m "" "$tag_name"
           hub release edit -a PIPE_URLS_AND_CHECKSUMS -m "" "$tag_name"
 
@@ -132,7 +132,7 @@ jobs:
 # #          config: ${{ secrets.CONFIG }} # ssh_config; optional
 #           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
-      - name: commit
+      - name: Commit
         if: ${{ env.DOWNLOAD  == '1'}}
         uses: EndBug/add-and-commit@v7
 
