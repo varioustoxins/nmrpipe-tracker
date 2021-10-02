@@ -37,22 +37,22 @@ jobs:
         run: |
           python .github/workflows/scripts/get_pipe_version.py > CURRENT_PIPE_VERSION
 
-#      - name: Download nmrpipe if not current
-#        run: |
-#          if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
-#            python scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
-#            mkdir MIRROR
-#            for url in $(python3 scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
-#              file_name=$(python3 scripts/url_to_filename.py $url)
-#              wget $url -nv -O MIRROR/$file_name
-#              break
-#            done
-#          fi
-
-      - name: Download nmrpipe binval for testing
+      - name: Download nmrpipe if not current
         run: |
-          mkdir MIRROR
-          wget http://www.ibbr.umd.edu/nmrpipe/binval.com  -nv -O MIRROR/binval.com
+          if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
+            python scripts/get_pipe_urls.py > PIPE_URLS_AND_CHECKSUMS
+            mkdir MIRROR
+            for url in $(python3 scripts/list_urls.py PIPE_URLS_AND_CHECKSUMS); do
+              file_name=$(python3 scripts/url_to_filename.py $url)
+              wget $url -nv -O MIRROR/$file_name
+              break
+            done
+          fi
+
+#      - name: Download nmrpipe binval for testing
+#        run: |
+#          mkdir MIRROR
+#          wget http://www.ibbr.umd.edu/nmrpipe/binval.com  -nv -O MIRROR/binval.com
 
       - name: Do check sums
         run:  |
