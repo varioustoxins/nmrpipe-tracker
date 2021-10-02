@@ -54,7 +54,9 @@ jobs:
           mkdir MIRROR
           wget http://www.ibbr.umd.edu/nmrpipe/binval.com  -nv -O MIRROR/binval.com
 
-
+      - name: Do check sums
+        run:  |
+          python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
 #      - name: checkout master
 #        working-directory: ./nmrpipe-tracker
 #        run: |
