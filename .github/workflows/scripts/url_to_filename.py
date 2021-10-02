@@ -2,6 +2,8 @@ import os
 import sys
 from urllib.parse import urlparse
 
-if __name__ == '__main__':
+def url_to_filename(url):
+    return os.path.basename(urlparse(url).path)
 
-    print(os.path.basename(urlparse(sys.argv[1]).path))
+if __name__ == '__main__':
+    print(url_to_path(sys.argv[1]))
