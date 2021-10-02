@@ -48,24 +48,15 @@ jobs:
             done
           fi
 
-#      - name: Download nmrpipe binval for testing
-#        run: |
-#          mkdir MIRROR
-#          wget http://www.ibbr.umd.edu/nmrpipe/binval.com  -nv -O MIRROR/binval.com
-
       - name: Do check sums
         run:  |
           python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
-#      - name: checkout master
-#        working-directory: ./nmrpipe-tracker
-#        run: |
-#          git checkout master
 
       # Runs a set of commands using the runners shell
       - name: date stamp
         run: |
-          touch ./DATE-STAMP
-          echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE-STAMP
+          touch ./DATE_STAMP
+          echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE_STAMP
 
       - name: date stamp in environment variable
         run: |
@@ -89,6 +80,19 @@ jobs:
         run: |
           tag_name=nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
           hub release edit $(find ./MIRROR -type f -name "*" -printf "-a %p ") -m "" "$tag_name"
+          hub release edit -a CURRENT_PIPE_VERSION -m "" "$tag_name"
+          hub release edit -a DATE_STAMP -m "" "$tag_name"
+          hub release edit -a PIPE_URLS_AND_CHECKSUMS -m "" "$tag_name"
+
+      - name: Remove mirror directory
+        run: |
+          rm -rf MIRROR
+          rm PIPE_URLS_AND_CHECKSUMS
+          rm DATE_STAMP
+
+      - name: Update date stamp
+        run: |
+          mv CURRENT_PIPE_VERSION PIPE_VERSION
 
 #      - name: release
 #        uses: actions/create-release@v1
@@ -121,11 +125,11 @@ jobs:
 # #          config: ${{ secrets.CONFIG }} # ssh_config; optional
 #           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
-#      - name: commit
-#        uses: EndBug/add-and-commit@v7
-#
-#        with:
-#          message: test
-#          branch: main
+      - name: commit
+        uses: EndBug/add-and-commit@v7
+
+        with:
+          message: nmrpipe-${{ env.CURRENT_PIPE_VERSION }}
+          branch: main
 
 
