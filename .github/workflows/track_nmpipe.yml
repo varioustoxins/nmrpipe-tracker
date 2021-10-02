@@ -49,6 +49,11 @@ jobs:
 #            done
 #          fi
 
+      - name: Download nmrpipe binval for testing
+        run: |
+          mkdir MIRROR
+          wget http://www.ibbr.umd.edu/nmrpipe/binval.com  -nv -O MIRROR/binval.com
+
 
 #      - name: checkout master
 #        working-directory: ./nmrpipe-tracker
