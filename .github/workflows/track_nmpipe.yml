@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -37,6 +37,9 @@ jobs:
         run: |
           python .github/workflows/scripts/get_pipe_version.py > CURRENT_PIPE_VERSION
 
+  download:
+    needs: setup
+    steps:
       - name: Download nmrpipe if not current
         run: |
           if ! cmp --silent -- CURRENT_PIPE_VERSION PIPE_VERSION; then
@@ -46,21 +49,24 @@ jobs:
               file_name=$(python3 .github/workflows/scripts/url_to_filename.py $url)
               wget $url -nv -O MIRROR/$file_name
             done
+            mv CURRENT_PIPE_VERSION PIPE_VERSION
           fi
-
+  release_and_commit:
+    needs: download
+    steps:
       - name: Do check sums
         run:  |
           python .github/workflows/scripts/cksum.py "PIPE_URLS_AND_CHECKSUMS"
 
       # Runs a set of commands using the runners shell
-      - name: creaet a date stamp
+      - name: Create a date stamp
         run: |
           touch ./DATE_STAMP
           echo ${{ steps.current-time.outputs.formattedTime }} > ./DATE_STAMP
 
       - name: Put nmrpipe version in environment variable
         run: |
-          echo CURRENT_PIPE_VERSION=`cat CURRENT_PIPE_VERSION`>> $GITHUB_ENV
+          echo PIPE_VERSION=`cat PIPE_VERSION`>> $GITHUB_ENV
 
       - name: release
         uses: actions/create-release@v1
