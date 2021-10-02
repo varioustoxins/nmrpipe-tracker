@@ -63,7 +63,7 @@ jobs:
 
       - name: date stamp in environment variable
         run: |
-          CURRENT_PIPE_VERSION=$(cat CURRENT_PIPE_VERSION)
+          echo CURENT_PIPE_VERSION=`CURRENT_PIPE_VERSION`>> $GITHUB_ENV
 
 
       - name: release
@@ -72,8 +72,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ env.VERSION_PREFIX }}.binval.com
-          tag_name: ${{ env.VERSION_PREFIX }}.binval.com
+          release_name: ${{ env.CURRENT_PIPE_VERSION }}.binval.com
+          tag_name: ${{ env.CURRENT_PIPE_VERSION }}.binval.com
           body: test
         env:
           GITHUB_TOKEN: ${{ github.token }}
