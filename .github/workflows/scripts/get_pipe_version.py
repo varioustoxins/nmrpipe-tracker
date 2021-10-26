@@ -12,7 +12,7 @@ def parse_page(content_soup):
     for i in content_soup.body():
         match = version_regex.search(str(i))
         if match:
-            versions.add(f'{match.group(1)}+rev{match.group(2)}')
+            versions.add(f'{match.group(1)}-{match.group(2)}')
 
     if not versions:
         print('WARNING: nop version string found setting version to 0.0.0')
